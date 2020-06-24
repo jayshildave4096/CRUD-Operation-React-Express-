@@ -73,16 +73,15 @@ class Item extends Component {
       },
       body: JSON.stringify(data),
     })
-      .then(function (res) {
-        if (res >= 400) throw new Error("Bad response from Server");
-        return res.json();
+      .then(function (response) {
+        if (response >= 400) throw new Error("Bad response from Server");
+        
+        return response.json();
       })
-      .catch(function (err) {
-        console.log(err);
+      .catch(function(err) {
+        return err;
       });
     this.setState({ isRemoved: true });
-    this.props.allposts.splice(this.state.id,1)
-    
   };
   //updating the post if editing
   updatePost = () => {
@@ -237,7 +236,6 @@ class Item extends Component {
     );
   };
 
-  
   render() {
     return (
       <TableBody className="table">

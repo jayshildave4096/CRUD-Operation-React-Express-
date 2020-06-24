@@ -68,7 +68,9 @@ router.post("/update", function (req, res, next) {
 });
 
 router.delete("/remove", function (req, res) {
-  connection.query("delete from posts where id = ?", req.body.id, function (
+  var data=req.body.id;
+  console.log(data)
+  connection.query("DELETE FROM POSTS WHERE id=  ?", data, function (
     error,
     results,
     field

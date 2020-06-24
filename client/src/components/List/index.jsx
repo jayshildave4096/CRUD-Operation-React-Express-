@@ -11,17 +11,37 @@ import Paper from "@material-ui/core/Paper";
 import "./index.css";
 
 class List extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      posts:[],
+    }
+  }
+  componentDidMount() {
+    let self=this;
+    
+    fetch('http://localhost:9000/users/list', {
+        method: 'GET'
+    }).then(function(response) {
+        if (response.status >= 400) {
+            throw new Error("Bad response from server");
+        }
+        return response.json();
+    }).then(function(data) {
+        self.setState({posts: data});
+    }).catch(err => {
+    console.log('caught it!',err);
+    })
+}
   render() {
     return (
-      <div>
-
-        
-        <Grid container spacing={5} className="posts_container">
-
+      
+        <Grid container spacing={5} >
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
+                <TableCell>ID</TableCell>
                   <TableCell>Product Name</TableCell>
                   <TableCell align="center">Product Type</TableCell>
                   <TableCell align="center">Product Status</TableCell>
@@ -34,13 +54,13 @@ class List extends Component {
                 </TableRow>
               </TableHead>
 
-              {this.props.posts.map((post, index) => (
-                <Item {...post} key={index} id={post.id} />
+              {this.state.posts.map((post) => (
+                <Item {...post} key={post.id} id={post.id}  allposts={this.state.posts}/>
               ))}
             </Table>
           </TableContainer>
         </Grid>
-      </div>
+      
     );
   }
 }

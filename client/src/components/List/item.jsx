@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import List from "../List/index";
 import TextField from "@material-ui/core/TextField";
 
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-
+import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -17,8 +16,10 @@ class Item extends Component {
     super(props);
 
     this.state = {
+      posts: this.props.allposts,
       isEdit: false,
-
+      isRemoved: false,
+      id: this.props.id,
       prod_name: this.props.prod_name,
       prod_type: this.props.prod_type,
       prod_status: this.props.prod_status,
@@ -61,8 +62,27 @@ class Item extends Component {
   };
 
   //removing the post
+
   removePost = () => {
-    this.props.removePost(this.props.id);
+    var data = { id: this.state.id };
+    console.log(data);
+    fetch("http://localhost:9000/users/remove", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then(function (res) {
+        if (res >= 400) throw new Error("Bad response from Server");
+        return res.json();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+    this.setState({ isRemoved: true });
+    this.props.allposts.splice(this.state.id,1)
+    
   };
   //updating the post if editing
   updatePost = () => {
@@ -70,17 +90,32 @@ class Item extends Component {
   };
 
   donePost = () => {
-    this.props.updatePost(
-      this.props.id,
-      this.state.prod_name,
-      this.state.prod_type,
-      this.state.prod_status,
-      this.state.prod_desc,
-      this.state.prod_quantity,
-      this.state.cust_name,
-      this.state.cust_number,
-      this.state.cust_mail
-    );
+    var data = {
+      id: this.state.id,
+      prod_name: this.state.prod_name,
+      prod_type: this.state.prod_type,
+      prod_status: this.state.prod_status,
+      prod_desc: this.state.prod_desc,
+      prod_quantity: this.state.prod_quantity,
+      cust_name: this.state.cust_name,
+      cust_number: this.state.cust_number,
+      cust_mail: this.state.cust_mail,
+    };
+    fetch("http://localhost:9000/users/update", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    })
+      .then(function (res) {
+        if (res >= 400) throw new Error("Bad Response from Server");
+        res.json();
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
+
     this.setState({ isEdit: false });
   };
 
@@ -104,7 +139,7 @@ class Item extends Component {
             native
             name="prod_type"
             onChange={this.handleChangeProdType}
-            defaultvalue={this.state.prod_type}
+            defaultValue={this.state.prod_type}
             required
           >
             <option value="Valid">Valid</option>
@@ -123,7 +158,7 @@ class Item extends Component {
             native
             name="prod_status"
             onChange={this.handleChangeProdStatus}
-            defaultvalue={this.state.prod_status}
+            defaultValue={this.state.prod_status}
             required
           >
             <option value="In Progress">In Progress</option>
@@ -202,42 +237,43 @@ class Item extends Component {
     );
   };
 
+  
   render() {
-
-
-
     return (
       <TableBody className="table">
-        <TableRow key={this.props.prod_name}>
+        <TableRow key={this.state.id}>
           <TableCell component="th" scope="row">
-            {this.state.isEdit ? this.renderProdName() : this.props.prod_name}
+            {this.state.id}
+          </TableCell>
+          <TableCell>
+            {this.state.isEdit ? this.renderProdName() : this.state.prod_name}
           </TableCell>
           <TableCell align="center">
-            {this.state.isEdit ? this.renderProdType() : this.props.prod_type}
+            {this.state.isEdit ? this.renderProdType() : this.state.prod_type}
           </TableCell>
           <TableCell align="center">
             {this.state.isEdit
               ? this.renderProdStatus()
-              : this.props.prod_status}
+              : this.state.prod_status}
           </TableCell>
           <TableCell align="center">
-            {this.state.isEdit ? this.renderProdDesc() : this.props.prod_desc}
+            {this.state.isEdit ? this.renderProdDesc() : this.state.prod_desc}
           </TableCell>
           <TableCell align="center">
             {this.state.isEdit
               ? this.renderProdQuant()
-              : this.props.prod_quantity}
+              : this.state.prod_quantity}
           </TableCell>
           <TableCell align="center">
-            {this.state.isEdit ? this.renderCustName() : this.props.cust_name}
+            {this.state.isEdit ? this.renderCustName() : this.state.cust_name}
           </TableCell>
           <TableCell align="center">
             {this.state.isEdit
               ? this.renderCustNumber()
-              : this.props.cust_number}
+              : this.state.cust_number}
           </TableCell>
           <TableCell align="center">
-            {this.state.isEdit ? this.renderCustMail() : this.props.cust_mail}
+            {this.state.isEdit ? this.renderCustMail() : this.state.cust_mail}
           </TableCell>
           <TableCell align="center">
             {this.state.isEdit
@@ -258,37 +294,4 @@ class Item extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    removePost: (id) => {
-      dispatch(actions.removePost(id));
-    },
-    updatePost: (
-      id,
-      prod_name,
-      prod_type,
-      prod_status,
-      prod_desc,
-      prod_quantity,
-      cust_name,
-      cust_number,
-      cust_mail
-    ) => {
-      dispatch(
-        actions.updatePost(
-          id,
-          prod_name,
-          prod_type,
-          prod_status,
-          prod_desc,
-          prod_quantity,
-          cust_name,
-          cust_number,
-          cust_mail
-        )
-      );
-    },
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Item);
+export default Item;

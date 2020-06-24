@@ -25,13 +25,13 @@ class App extends Component {
           <Button size="large" variant="contained" color="secondary" style={style}>List Product</Button>
         </Link>
         </div>
-        {/* <List posts={this.props.allPosts} /> */}
+        
         <Switch>
           <Route exact path="/">
             <Input />
           </Route>
           <Route path="/list">
-            <List posts={this.props.allPosts} />
+            <List />
           </Route>
         </Switch>
       </div>

@@ -1,0 +1,14 @@
+.form {
+   padding: 20px;
+  text-align: center;
+  max-width: 640;
+  max-height: 480;
+  background-size: auto;
+  
+}
+
+.addbtn{
+  padding: 2px;
+  margin:auto;
+}
+

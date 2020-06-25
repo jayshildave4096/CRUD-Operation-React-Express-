@@ -8,7 +8,15 @@ import { Route, Link, Switch } from "react-router-dom";
 
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      allpost:[]
+    }
+  }
+  
   render() {
+    console.log(this.state.allpost);
     const style={
       paddingLeft:"20px",
       
@@ -22,13 +30,13 @@ class App extends Component {
         </Link>
         {" "}
         <Link to="/list">
-          <Button size="large" variant="contained" color="secondary" style={style}>List Product</Button>
+          <Button size="large" variant="contained" color="secondary" style={style} >List Product</Button>
         </Link>
         </div>
         
         <Switch>
           <Route exact path="/">
-            <Input />
+            <Input posts={this.state.allposts}/>
           </Route>
           <Route path="/list">
             <List />

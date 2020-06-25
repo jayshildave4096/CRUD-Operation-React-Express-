@@ -32,7 +32,7 @@ class Input extends Component {
 
     state[event.target.name] = event.target.value;
     this.setState({ state });
-    console.log(this.state);
+    
   };
 
   handleSubmit = (event) => {

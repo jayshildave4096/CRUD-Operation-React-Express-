@@ -64,10 +64,21 @@ class Item extends Component {
   //removing the post
 
   removePost = () => {
-    var data = { id: this.state.id };
+    var data = {
+      id: this.state.id,
+      prod_name: this.state.prod_name,
+      prod_type: this.state.prod_type,
+      prod_status: this.state.prod_status,
+      prod_desc: this.state.prod_desc,
+      prod_quantity: this.state.prod_quantity,
+      cust_name: this.state.cust_name,
+      cust_number: this.state.cust_number,
+      cust_mail: this.state.cust_mail,
+    };
+    var p = [...this.state.posts];
     console.log(data);
     fetch("http://localhost:9000/users/remove", {
-      method: "DELETE",
+      method: "Delete",
       headers: {
         "Content-Type": "application/json",
       },
@@ -75,13 +86,22 @@ class Item extends Component {
     })
       .then(function (response) {
         if (response >= 400) throw new Error("Bad response from Server");
-        
+
         return response.json();
       })
-      .catch(function(err) {
+      .catch(function (err) {
         return err;
       });
-    this.setState({ isRemoved: true });
+    console.log("before", p, data.id);
+    var idpost= p.find((post) => {
+      
+      return post.id !== data.id;
+    });
+    console.log("idpost",idpost);
+    p=p.filter((post)=> post!==idpost);
+    console.log("after", p);
+    // this.props.reRender();
+    this.setState({ isRemoved: true, posts: p });
   };
   //updating the post if editing
   updatePost = () => {

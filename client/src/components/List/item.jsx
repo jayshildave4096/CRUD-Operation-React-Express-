@@ -77,6 +77,12 @@ class Item extends Component {
     };
     var p = [...this.state.posts];
     console.log(data);
+    var idpost = p.find((post) => {
+      return post.id !== data.id;
+    });
+    console.log("idpost", idpost);
+    p = p.filter((post) => post !== idpost);
+    console.log("after", p);
     fetch("http://localhost:9000/users/remove", {
       method: "Delete",
       headers: {
@@ -93,13 +99,7 @@ class Item extends Component {
         return err;
       });
     console.log("before", p, data.id);
-    var idpost= p.find((post) => {
-      
-      return post.id !== data.id;
-    });
-    console.log("idpost",idpost);
-    p=p.filter((post)=> post!==idpost);
-    console.log("after", p);
+
     // this.props.reRender();
     this.setState({ isRemoved: true, posts: p });
   };

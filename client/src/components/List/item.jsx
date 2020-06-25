@@ -103,11 +103,14 @@ class Item extends Component {
     // this.props.reRender();
     this.setState({ isRemoved: true, posts: p });
   };
+  
+  
   //updating the post if editing
   updatePost = () => {
     this.setState({ isEdit: true });
   };
 
+  
   donePost = () => {
     var data = {
       id: this.state.id,

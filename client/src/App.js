@@ -47,10 +47,5 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    allPosts: state.post,
-  };
-};
 
-export default connect(mapStateToProps, null)(App);
+export default (App);

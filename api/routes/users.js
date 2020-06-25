@@ -71,14 +71,7 @@ router.delete("/remove", function (req, res) {
   console.log(req.body);
   var post = {
     id: req.body.id,
-    prod_name: req.body.prod_name,
-    prod_type: req.body.prod_type,
-    prod_status: req.body.prod_status,
-    prod_desc: req.body.prod_desc,
-    prod_quantity: req.body.prod_quantity,
-    cust_name: req.body.cust_name,
-    cust_number: req.body.cust_number,
-    cust_mail: req.body.cust_mail,
+
   };
   
   connection.query("DELETE FROM POSTS WHERE id=  ?", post.id, function (
@@ -86,7 +79,8 @@ router.delete("/remove", function (req, res) {
     results,
     field
   ) {
-    console.log(error,results);
+    if(error) throw error;
+    console.log(results);
     res.send(JSON.stringify(results));
   });
  

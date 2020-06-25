@@ -1,8 +1,8 @@
-import post from "./post.jsx";
-import { combineReducers } from "redux";
+// import post from "./post.jsx";
+// import { combineReducers } from "redux";
 
-const index = combineReducers({
-  post
-});
+// const index = combineReducers({
+//   post
+// });
 
-export default index;
+// export default index;

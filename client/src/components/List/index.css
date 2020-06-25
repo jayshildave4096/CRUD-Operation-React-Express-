@@ -1,8 +1,13 @@
+
 .posts_container {
-  width: 100%;
+  width: auto;
   margin:10px auto 0 auto;
   padding-left:10px; 
 }
 .table{
   padding-top: 50px;
+  padding-right:10px;
+
+  margin-left: 20px;
+  margin-right: 50px;
 }

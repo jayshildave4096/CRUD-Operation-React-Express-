@@ -41,7 +41,7 @@ class List extends Component {
   }
   render() {
     return (
-      <Grid container spacing={5} className="table">
+      <Grid  className="table">
         <TableContainer component={Paper}>
           <Table>
             <TableHead>

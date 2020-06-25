@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-import List from "../List/index";
 import TextField from "@material-ui/core/TextField";
-
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import Grid from "@material-ui/core/Grid";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import FormControl from "@material-ui/core/FormControl";
@@ -66,51 +63,43 @@ class Item extends Component {
   removePost = () => {
     var data = {
       id: this.state.id,
-      prod_name: this.state.prod_name,
-      prod_type: this.state.prod_type,
-      prod_status: this.state.prod_status,
-      prod_desc: this.state.prod_desc,
-      prod_quantity: this.state.prod_quantity,
-      cust_name: this.state.cust_name,
-      cust_number: this.state.cust_number,
-      cust_mail: this.state.cust_mail,
     };
     var p = [...this.state.posts];
     fetch("http://localhost:9000/users/remove", {
-      method: "Delete",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
     })
       .then(function (response) {
-        if (response >= 400) throw new Error("Bad response from Server");
+        if (response>=400) throw new Error("Bad response from Server");
 
         return response.json();
       })
-      .catch(function (err) {
-        return err;
-      });
-    console.log("before", p, data.id);
+      .then(() => {
+        console.log("before", p, data.id);
 
-    var idpost = p.find((post) => {
-      return post.id !== data.id;
-    });
-    console.log("idpost", idpost);
-    p = p.filter((post) => post !== idpost);
-    console.log("after", p);
+        var idpost = p.find((post) => {
+          return post.id !== data.id;
+        });
+        console.log("idpost", idpost);
+        p = p.filter((post) => post !== idpost);
+        console.log("after", p);
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
 
     // this.props.reRender();
     this.setState({ isRemoved: true, posts: p });
   };
-  
-  
+
   //updating the post if editing
   updatePost = () => {
     this.setState({ isEdit: true });
   };
 
-  
   donePost = () => {
     var data = {
       id: this.state.id,
